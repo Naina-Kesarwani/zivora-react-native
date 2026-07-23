@@ -1,136 +1,261 @@
+import React, {
+    useContext,
+    useEffect,
+    useState,
+} from "react";
+import {
+    ActivityIndicator,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import FontAwesome from "@react-native-vector-icons/fontawesome";
+import { MaterialIcons } from "@react-native-vector-icons/material-icons/static";
 
+import {
+    getAuth,
+    onAuthStateChanged,
+} from "@react-native-firebase/auth";
 
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Reorder from "./components/Reorder";
 import Homescreen from "./components/Homescreen";
 import CartScreen from "./components/CartScreen";
 import ProductDetails from "./components/ProductDetails";
+import AuthScreen from "./components/AuthScreen";
+import AccountScreen from "./components/AccountScreen";
 
-import FontAwesome from '@react-native-vector-icons/fontawesome';
+import {
+    CartContext,
+    CartProvider,
+} from "./src/context/CardContext";
 
-import { CartContext, CartProvider } from "./src/context/CardContext";
-import { MaterialIcons } from '@react-native-vector-icons/material-icons/static';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator();
 
 const MyHomeStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false,
+            }}
+        >
+            <Stack.Screen
+                name="HOME"
+                component={Homescreen}
+            />
 
-      }}
+            <Stack.Screen
+                name="PRODUCT_DETAILS"
+                component={ProductDetails}
+            />
+        </Stack.Navigator>
+    );
+};
 
-    >
+const CartTabIcon = ({ size, color }) => {
+    const { carts } = useContext(CartContext);
 
+    return (
+        <View style={styles.cartIconContainer}>
+            <FontAwesome
+                name="shopping-cart"
+                size={size}
+                color={color}
+            />
 
-      <Stack.Screen name="HOME" component={Homescreen} />
-      <Stack.Screen name="PRODUCT_DETAILS" component={ProductDetails} />
-    </Stack.Navigator>
-  );
-}
+            {carts?.length > 0 && (
+                <View
+                    style={[
+                        styles.cartBadge,
+                        { backgroundColor: color },
+                    ]}
+                >
+                    <Text style={styles.cartBadgeText}>
+                        {carts.length}
+                    </Text>
+                </View>
+            )}
+        </View>
+    );
+};
+
+const MainTabs = ({ user, isGuest, onLogout }) => {
+    return (
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false,
+                tabBarShowLabel: false,
+                tabBarInactiveTintColor: "#000000",
+                tabBarActiveTintColor: "#6170db",
+            }}
+        >
+            <Tab.Screen
+                name="HOME_STACK"
+                component={MyHomeStack}
+                options={{
+                    tabBarIcon: ({ size, color }) => (
+                        <FontAwesome
+                            name="home"
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="REORDER"
+                component={Reorder}
+                options={{
+                    tabBarIcon: ({ size, color }) => (
+                        <FontAwesome
+                            name="reorder"
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="CART"
+                component={CartScreen}
+                options={{
+                    tabBarIcon: ({ size, color }) => (
+                        <CartTabIcon
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="ACCOUNT"
+                options={{
+                    tabBarIcon: ({ size, color }) => (
+                        <MaterialIcons
+                            name="account-box"
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            >
+                {() => (
+                    <AccountScreen
+                        user={user}
+                        isGuest={isGuest}
+                        onLogout={onLogout}
+                    />
+                )}
+            </Tab.Screen>
+        </Tab.Navigator>
+    );
+};
 
 const App = () => {
-  return (
-    <CartProvider>
-      <NavigationContainer>
-        <Tab.Navigator screenOptions={{
-          headerShown: false,
-          tabBarShowLabel: false,
-          tabBarInactiveTintColor: "#000",
-          tabBarActiveTintColor: "#6170db",
-        }}
-         
-        >
-          <Tab.Screen
-            name="HOME_STACK"
-            component={MyHomeStack}
-            options={{
-              tabBarIcon: ({ size, focused, color }) => {
-                return <FontAwesome name="home" size={size} color={color} />
-              }
-            }} />
+    const [user, setUser] = useState(null);
+    const [initializing, setInitializing] = useState(true);
+    const [isGuest, setIsGuest] = useState(false);
 
-          <Tab.Screen
-            name="REORDER"
-            component={Reorder}
-            options={{
-              tabBarIcon: ({ size, focused, color }) => {
-                return <FontAwesome name="reorder" size={size} color={color} />
-              }
-            }} />
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(
+            getAuth(),
+            firebaseUser => {
+                setUser(firebaseUser);
+                setInitializing(false);
+            }
+        );
 
-          <Tab.Screen
-            name="CART"
-            component={CartScreen}
-            options={{
-              tabBarIcon: ({ size, focused, color }) => {
-                const { carts } = useContext(CartContext);
-                return (
+        return unsubscribe;
+    }, []);
 
-
-                  <View style={{position:"relative"}}>
-                    <FontAwesome
-                      name="shopping-cart"
-                      size={size}
-                      color={color} />
-                    <View  style={{
-                        height: 14,
-                        width: 14,
-                        borderRadius: 7,
-                        backgroundColor: color,
-
-                        alignItems: "center",
-                        justifyContent: "center",
-                        position:"absolute",
-                        bottom:20,
-                        left:18
-                      }}>
-                      <Text style={{
-                        fontSize:10,
-                        fontWeight:500,
-                        color:"white"}}>
-                          {carts?.length}
-                          </Text>
-                    </View>
-                  </View>
-
-                )
-              }
-            }}
-          />
-
-          <Tab.Screen
-            name="ACCOUNT"
-            component={Homescreen}
-            options={{
-              tabBarIcon: ({ size, focused, color }) => (
-                <MaterialIcons
-                  name="account-box"
-                  size={size}
-                  color={color}
+    if (initializing) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator
+                    size="large"
+                    color="#E55B5B"
                 />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </CartProvider>
-  );
+            </View>
+        );
+    }
+
+    const canOpenApp = Boolean(user) || isGuest;
+
+    return (
+        <CartProvider>
+            <NavigationContainer>
+                <RootStack.Navigator
+                    screenOptions={{
+                        headerShown: false,
+                    }}
+                >
+                    {canOpenApp ? (
+                        <RootStack.Screen name="MAIN_APP">
+                            {() => (
+                                <MainTabs
+                                    user={user}
+                                    isGuest={isGuest}
+                                    onLogout={() =>
+                                        setIsGuest(false)
+                                    }
+                                />
+                            )}
+                        </RootStack.Screen>
+                    ) : (
+                        <RootStack.Screen name="AUTH">
+                            {() => (
+                                <AuthScreen
+                                    onContinueAsGuest={() =>
+                                        setIsGuest(true)
+                                    }
+                                />
+                            )}
+                        </RootStack.Screen>
+                    )}
+                </RootStack.Navigator>
+            </NavigationContainer>
+        </CartProvider>
+    );
 };
 
 export default App;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#E5D8DB",
+    },
+
+    cartIconContainer: {
+        position: "relative",
+    },
+
+    cartBadge: {
+        position: "absolute",
+        left: 17,
+        bottom: 17,
+        minWidth: 15,
+        height: 15,
+        borderRadius: 8,
+        paddingHorizontal: 3,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    cartBadgeText: {
+        color: "#FFFFFF",
+        fontSize: 9,
+        fontWeight: "600",
+    },
 });
