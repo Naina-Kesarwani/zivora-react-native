@@ -92,7 +92,7 @@ const MainTabs = ({ user, isGuest, onLogout }) => {
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarInactiveTintColor: "#000000",
-                tabBarActiveTintColor: "#6170db",
+                tabBarActiveTintColor: "#E55B5B",
             }}
         >
             <Tab.Screen

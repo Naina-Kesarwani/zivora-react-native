@@ -113,12 +113,13 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         padding: 20,
+        marginTop:-50,
     },
     contentContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginHorizontal: 20,
-        marginVertical: 20,
+        marginVertical: 16,
     },
     title: {
         fontSize: 20,

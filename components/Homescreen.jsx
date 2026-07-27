@@ -1,57 +1,89 @@
-import { View, Text, StyleSheet, TextInput, FlatList } from 'react-native';
-import React, { useState } from 'react';
-import LinearGradient from 'react-native-linear-gradient';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  FlatList,
+} from "react-native";
+import React, { useState } from "react";
+import LinearGradient from "react-native-linear-gradient";
 import Header from "../src/Header";
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Category from "../src/Category";
 import ProductCard from "../src/ProductCard";
 import data from "../src/data/data.json";
 
-
-
-
-const categories = ['Trending Now', 'All', 'New', 'Men', 'Women']
+const categories = ["Trending Now", "All", "New", "Men", "Women"];
 
 export default function Homescreen() {
-
   const [products, setProducts] = useState(data.products);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  
-
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchText, setSearchText] = useState("");
 
   const handleLiked = item => {
-    const newProducts = products.map(prod => {
-      if (prod.id === item.id) {
+    const newProducts = products.map(product => {
+      if (product.id === item.id) {
         return {
-          ...prod,
-          isLiked: !prod.isLiked,
+          ...product,
+          isLiked: !product.isLiked,
         };
       }
 
-      return prod;
+      return product;
     });
 
     setProducts(newProducts);
   };
+
+  const filteredProducts = products.filter(product => {
+    const matchesCategory =
+      selectedCategory === "All" ||
+      product.categories?.includes(selectedCategory);
+
+    const matchesSearch = product.title
+      .toLowerCase()
+      .includes(searchText.trim().toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
+
   return (
-    <LinearGradient colors={['#e5d8db', '#e1d4d5', '#e4d6d6']} style={styles.linearGradient}>
+    <LinearGradient
+      colors={["#e5d8db", "#e1d4d5", "#e4d6d6"]}
+      style={styles.linearGradient}
+    >
       <Header />
 
-
-      <FlatList data={products}
+      <FlatList
+        data={filteredProducts}
+        keyExtractor={item => item.id.toString()}
         ListHeaderComponent={
           <>
-            <Text style={styles.matchText}>Zivora - Match Your Style</Text>
+            <Text style={styles.matchText}>
+              <Text style={styles.appName}>Zivora</Text>
+              <Text> - Match Your Style</Text>
+            </Text>
 
             <View style={styles.inputContainer}>
               <View style={styles.iconContainer}>
-                <FontAwesome name="search" size={26} color="#a49898c0" />
+                <FontAwesome
+                  name="search"
+                  size={22}
+                  color="#a49898c0"
+                />
               </View>
-              <TextInput style={styles.textInput} placeholder='Search' />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Search products..."
+                placeholderTextColor="#8A8A8A"
+                value={searchText}
+                onChangeText={setSearchText}
+              />
+
             </View>
 
-
-            <FlatList data={categories}
+            <FlatList
+              data={categories}
               renderItem={({ item }) => (
                 <Category
                   item={item}
@@ -59,36 +91,46 @@ export default function Homescreen() {
                   setSelectedCategory={setSelectedCategory}
                 />
               )}
-              keyExtractor={(item) => item.id}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false} />
+              keyExtractor={item => item}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            />
           </>
         }
-
-        renderItem={({ item, index }) => (<ProductCard item={item} handleLiked={handleLiked} />)}
+        renderItem={({ item }) => (
+          <ProductCard item={item} handleLiked={handleLiked} />
+        )}
         numColumns={2}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 50,
-        }}
-
+        contentContainerStyle={{ paddingBottom: 50 }}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>No products found.</Text>
+        }
       />
     </LinearGradient>
-  )
-};
+  );
+}
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   linearGradient: {
-    // flex: 1,
+    flex: 1,
     paddingLeft: 15,
     paddingRight: 15,
-    borderRadius: 5
+    borderRadius: 5,
   },
+
   matchText: {
-    fontSize: 28,
+    fontSize: 20,
     color: "#000000",
     marginTop: 25,
   },
+
+  appName: {
+    fontSize: 28,
+    fontWeight: "600",
+    color: "#E55B5B",
+  },
+
   inputContainer: {
     backgroundColor: "white",
     height: 48,
@@ -97,14 +139,21 @@ var styles = StyleSheet.create({
     flexDirection: "row",
     marginVertical: 10,
   },
+
   textInput: {
     flex: 1,
-
-
+    fontSize: 16,
+    color: "#222222",
   },
+
   iconContainer: {
     marginHorizontal: 15,
   },
 
-
+  emptyText: {
+    textAlign: "center",
+    marginTop: 30,
+    fontSize: 17,
+    color: "#757575",
+  },
 });

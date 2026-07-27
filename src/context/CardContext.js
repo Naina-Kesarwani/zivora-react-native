@@ -11,73 +11,111 @@ export const CartProvider = ({ children }) => {
     loadCartItems();
   }, []);
 
-  const loadCartItems = async () => {
-    let carts = await AsyncStorage.getItem("carts");
+  const totalSum = (items = []) => {
+    const total = items.reduce((amount, item) => {
+      const price = Number(item.price) || 0;
+      const quantity = Number(item.quantity) || 1;
 
-    carts = carts ? JSON.parse(carts) : [];
-
-    setCarts(carts);
-    totalSum(carts);
-  };
-
-  const addToCart = async (item) => {
-    const itemExist = carts.findIndex(
-      (cart) => cart.id === item.id
-    );
-
-    if (itemExist === -1) {
-      const newCartItems = [...carts, item];
-
-      await AsyncStorage.setItem(
-        "carts",
-        JSON.stringify(newCartItems)
-      );
-
-      setCarts(newCartItems);
-      totalSum(newCartItems);
-    }
-  };
-
- const deleteItemFromCart = async itemId => {
-    try {
-        const newItems = carts.filter(
-            cartItem => cartItem.id !== itemId
-        );
-
-        await AsyncStorage.setItem(
-            "carts",
-            JSON.stringify(newItems)
-        );
-
-        setCarts(newItems);
-        totalSum(newItems);
-    } catch (error) {
-        console.error("Failed to delete cart item:", error);
-    }
-};
-
-
-  
-
-const totalSum = (items = carts) => {
-    const total = items.reduce(
-        (amount, item) =>
-            amount + (Number(item.price) || 0),
-        0
-    );
+      return amount + price * quantity;
+    }, 0);
 
     setTotalPrice(total);
-};
+  };
 
-  const value = {
-    carts,
-    addToCart,
-    totalPrice,
-    deleteItemFromCart,
+  const saveCartItems = async items => {
+    await AsyncStorage.setItem("carts", JSON.stringify(items));
+    setCarts(items);
+    totalSum(items);
+  };
+
+  const loadCartItems = async () => {
+    try {
+      const savedCarts = await AsyncStorage.getItem("carts");
+      const parsedCarts = savedCarts ? JSON.parse(savedCarts) : [];
+
+      // Gives old saved cart items quantity: 1 automatically
+      const cartItemsWithQuantity = parsedCarts.map(item => ({
+        ...item,
+        quantity: item.quantity || 1,
+      }));
+
+      setCarts(cartItemsWithQuantity);
+      totalSum(cartItemsWithQuantity);
+    } catch (error) {
+      console.error("Failed to load cart items:", error);
+    }
+  };
+
+  const addToCart = async item => {
+    try {
+      const itemIndex = carts.findIndex(cart => cart.id === item.id);
+
+      let newCartItems;
+
+      if (itemIndex === -1) {
+        newCartItems = [...carts, { ...item, quantity: 1 }];
+      } else {
+        // Adding the same product again increases its quantity
+        newCartItems = carts.map(cartItem =>
+          cartItem.id === item.id
+            ? {
+                ...cartItem,
+                quantity: (cartItem.quantity || 1) + 1,
+              }
+            : cartItem
+        );
+      }
+
+      await saveCartItems(newCartItems);
+    } catch (error) {
+      console.error("Failed to add item to cart:", error);
+    }
+  };
+
+  const updateItemQuantity = async (itemId, change) => {
+    try {
+      const newCartItems = carts
+        .map(cartItem => {
+          if (cartItem.id !== itemId) {
+            return cartItem;
+          }
+
+          return {
+            ...cartItem,
+            quantity: (cartItem.quantity || 1) + change,
+          };
+        })
+        // Quantity 0 means remove that product from the cart
+        .filter(cartItem => cartItem.quantity > 0);
+
+      await saveCartItems(newCartItems);
+    } catch (error) {
+      console.error("Failed to update quantity:", error);
+    }
+  };
+
+  const deleteItemFromCart = async itemId => {
+    try {
+      const newCartItems = carts.filter(
+        cartItem => cartItem.id !== itemId
+      );
+
+      await saveCartItems(newCartItems);
+    } catch (error) {
+      console.error("Failed to delete cart item:", error);
+    }
   };
 
   return (
-    <CartContext.Provider value={value}>
+    <CartContext.Provider
+      value={{
+        carts,
+        totalPrice,
+        addToCart,
+        updateItemQuantity,
+        deleteItemFromCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
