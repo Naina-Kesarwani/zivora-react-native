@@ -1,36 +1,61 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import { getAuth } from "@react-native-firebase/auth";
 
-const Header = ({ isCart }) => {
+const Header = ({ isCart, title }) => {
   const navigation = useNavigation();
   const user = getAuth().currentUser;
+
+  const isBackHeader = isCart || title;
+
+  const handleLeftPress = () => {
+    if (title) {
+      navigation.goBack();
+    } else {
+      navigation.navigate("HOME_STACK");
+    }
+  };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={() => navigation.navigate("HOME_STACK")}
+        onPress={handleLeftPress}
         style={styles.appIconContainer}
       >
-        {isCart ? (
+        {isBackHeader ? (
           <FontAwesome
-            // style={{ marginLeft: 10 }}
             name="chevron-left"
             size={24}
             color="#E55858"
           />
         ) : (
-          <Image source={require("./assets/logo.png")} style={styles.appIcon} />
+          <Image
+            source={require("./assets/logo.png")}
+            style={styles.appIcon}
+          />
         )}
       </TouchableOpacity>
 
-      {isCart && <Text style={styles.myCart}>My Cart</Text>}
+      {isBackHeader && (
+        <Text style={styles.heading}>
+          {title || "My Cart"}
+        </Text>
+      )}
 
       <View style={styles.appImageContainer}>
         {user?.photoURL ? (
-          <Image source={{ uri: user.photoURL }} style={styles.appImage} />
+          <Image
+            source={{ uri: user.photoURL }}
+            style={styles.appImage}
+          />
         ) : (
           <FontAwesome name="user" size={22} color="#E55858" />
         )}
@@ -46,17 +71,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 30,
   },
 
   appIcon: {
     height: 28,
     width: 28,
-
   },
 
   appIconContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     height: 44,
     width: 44,
     borderRadius: 22,
@@ -65,7 +89,7 @@ const styles = StyleSheet.create({
   },
 
   appImageContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     height: 44,
     width: 44,
     borderRadius: 22,
@@ -80,8 +104,9 @@ const styles = StyleSheet.create({
     borderRadius: 22,
   },
 
-  myCart: {
-    fontSize: 28,
+  heading: {
+    fontSize: 25,
     color: "black",
+    fontWeight: "600",
   },
 });

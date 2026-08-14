@@ -22,12 +22,17 @@ import {
     onAuthStateChanged,
 } from "@react-native-firebase/auth";
 
-import Reorder from "./components/Reorder";
+import OrdersScreen from "./components/OrdersScreen";
 import Homescreen from "./components/Homescreen";
 import CartScreen from "./components/CartScreen";
 import ProductDetails from "./components/ProductDetails";
 import AuthScreen from "./components/AuthScreen";
 import AccountScreen from "./components/AccountScreen";
+import WishlistScreen from "./components/WishlistScreen";
+import { WishlistProvider } from "./src/context/WishlistContext";
+import CheckoutScreen from "./components/CheckoutScreen";
+import OrderSuccessScreen from "./components/OrderSuccessScreen";
+import OrderDetailsScreen from "./components/OrderDetailsScreen";
 
 import {
     CartContext,
@@ -53,6 +58,11 @@ const MyHomeStack = () => {
             <Stack.Screen
                 name="PRODUCT_DETAILS"
                 component={ProductDetails}
+            />
+
+            <Stack.Screen
+                name="WISHLIST"
+                component={WishlistScreen}
             />
         </Stack.Navigator>
     );
@@ -110,18 +120,21 @@ const MainTabs = ({ user, isGuest, onLogout }) => {
             />
 
             <Tab.Screen
-                name="REORDER"
-                component={Reorder}
+                name="ORDERS"
+                component={OrdersScreen}
                 options={{
                     tabBarIcon: ({ size, color }) => (
                         <FontAwesome
-                            name="reorder"
+                            name="shopping-bag"
                             size={size}
                             color={color}
                         />
                     ),
                 }}
             />
+
+
+
 
             <Tab.Screen
                 name="CART"
@@ -192,37 +205,52 @@ const App = () => {
 
     return (
         <CartProvider>
-            <NavigationContainer>
-                <RootStack.Navigator
-                    screenOptions={{
-                        headerShown: false,
-                    }}
-                >
-                    {canOpenApp ? (
-                        <RootStack.Screen name="MAIN_APP">
-                            {() => (
-                                <MainTabs
-                                    user={user}
-                                    isGuest={isGuest}
-                                    onLogout={() =>
-                                        setIsGuest(false)
-                                    }
+            <WishlistProvider>
+                <NavigationContainer>
+                    <RootStack.Navigator
+                        screenOptions={{
+                            headerShown: false,
+                        }}
+                    >
+                        {canOpenApp ? (
+                            <>
+                                <RootStack.Screen name="MAIN_APP">
+                                    {() => (
+                                        <MainTabs
+                                            user={user}
+                                            isGuest={isGuest}
+                                            onLogout={() => setIsGuest(false)}
+                                        />
+                                    )}
+                                </RootStack.Screen>
+
+                                <RootStack.Screen
+                                    name="CHECKOUT"
+                                    component={CheckoutScreen}
                                 />
-                            )}
-                        </RootStack.Screen>
-                    ) : (
-                        <RootStack.Screen name="AUTH">
-                            {() => (
-                                <AuthScreen
-                                    onContinueAsGuest={() =>
-                                        setIsGuest(true)
-                                    }
+
+                                <RootStack.Screen
+                                    name="ORDER_SUCCESS"
+                                    component={OrderSuccessScreen}
                                 />
-                            )}
-                        </RootStack.Screen>
-                    )}
-                </RootStack.Navigator>
-            </NavigationContainer>
+
+                                <RootStack.Screen
+                                    name="ORDER_DETAILS"
+                                    component={OrderDetailsScreen}
+                                />
+                            </>
+                        ) : (
+                            <RootStack.Screen name="AUTH">
+                                {() => (
+                                    <AuthScreen
+                                        onContinueAsGuest={() => setIsGuest(true)}
+                                    />
+                                )}
+                            </RootStack.Screen>
+                        )}
+                    </RootStack.Navigator>
+                </NavigationContainer>
+            </WishlistProvider>
         </CartProvider>
     );
 };

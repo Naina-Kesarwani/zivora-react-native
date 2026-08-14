@@ -5,35 +5,29 @@ import {
   TextInput,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../src/Header";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Category from "../src/Category";
 import ProductCard from "../src/ProductCard";
 import data from "../src/data/data.json";
+import { WishlistContext } from "../src/context/WishlistContext";
 
 const categories = ["Trending Now", "All", "New", "Men", "Women"];
 
 export default function Homescreen() {
-  const [products, setProducts] = useState(data.products);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchText, setSearchText] = useState("");
 
-  const handleLiked = item => {
-    const newProducts = products.map(product => {
-      if (product.id === item.id) {
-        return {
-          ...product,
-          isLiked: !product.isLiked,
-        };
-      }
+  const { wishlist, toggleWishlist } = useContext(WishlistContext);
 
-      return product;
-    });
-
-    setProducts(newProducts);
-  };
+  const products = useMemo(() => {
+    return data.products.map(product => ({
+      ...product,
+      isLiked: wishlist.some(item => item.id === product.id),
+    }));
+  }, [wishlist]);
 
   const filteredProducts = products.filter(product => {
     const matchesCategory =
@@ -69,9 +63,10 @@ export default function Homescreen() {
                 <FontAwesome
                   name="search"
                   size={22}
-                  color="#a49898c0"
+                  color="#A49898"
                 />
               </View>
+
               <TextInput
                 style={styles.textInput}
                 placeholder="Search products..."
@@ -79,7 +74,6 @@ export default function Homescreen() {
                 value={searchText}
                 onChangeText={setSearchText}
               />
-
             </View>
 
             <FlatList
@@ -98,7 +92,10 @@ export default function Homescreen() {
           </>
         }
         renderItem={({ item }) => (
-          <ProductCard item={item} handleLiked={handleLiked} />
+          <ProductCard
+            item={item}
+            handleLiked={toggleWishlist}
+          />
         )}
         numColumns={2}
         showsVerticalScrollIndicator={false}
@@ -116,7 +113,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 15,
     paddingRight: 15,
-    borderRadius: 5,
   },
 
   matchText: {

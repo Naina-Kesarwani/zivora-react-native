@@ -16,6 +16,7 @@ import LinearGradient from "react-native-linear-gradient";
 import FontAwesome from "@react-native-vector-icons/fontawesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Geolocation from "react-native-geolocation-service";
+import { useNavigation } from "@react-navigation/native";
 
 import {
     getAuth,
@@ -28,6 +29,8 @@ import {
 
 const AccountScreen = ({ isGuest, onLogout }) => {
     const user = getAuth().currentUser;
+
+    const navigation = useNavigation();
 
     const [locationInput, setLocationInput] = useState("");
     const [locations, setLocations] = useState([]);
@@ -60,6 +63,14 @@ const AccountScreen = ({ isGuest, onLogout }) => {
     }, [isGuest, locationsKey]);
 
     const saveLocations = async updatedLocations => {
+        if (!locationsKey) {
+            Alert.alert(
+                "Sign in required",
+                "Please sign in before saving locations."
+            );
+            return;
+        }
+
         await AsyncStorage.setItem(
             locationsKey,
             JSON.stringify(updatedLocations)
@@ -317,7 +328,25 @@ const AccountScreen = ({ isGuest, onLogout }) => {
                 {!isGuest && (
                     <>
                         <Text style={styles.email}>{user?.email}</Text>
+                        <TouchableOpacity
+                            style={styles.wishlistButton}
+                            onPress={() =>
+                                navigation.navigate("HOME_STACK", {
+                                    screen: "WISHLIST",
+                                })
+                            }
+                        >
+                            <FontAwesome name="heart" size={20} color="#E55B5B" />
 
+                            <Text style={styles.wishlistText}>My Wishlist</Text>
+
+                            <FontAwesome
+                                name="chevron-right"
+                                size={16}
+                                color="#757575"
+                                style={styles.wishlistArrow}
+                            />
+                        </TouchableOpacity>
                         <View style={styles.locationSection}>
 
 
@@ -491,7 +520,7 @@ const styles = StyleSheet.create({
         fontWeight: "700",
         color: "#333333",
         marginBottom: 8,
-        marginTop:12,
+        marginTop: 12,
     },
 
     locationInput: {
@@ -593,5 +622,26 @@ const styles = StyleSheet.create({
         fontSize: 11,
         textAlign: "center",
         marginTop: 6,
+    },
+    wishlistButton: {
+        width: "100%",
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "#FFFFFF",
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        height: 58,
+        marginTop: 28,
+    },
+
+    wishlistText: {
+        marginLeft: 13,
+        color: "#333333",
+        fontSize: 17,
+        fontWeight: "700",
+    },
+
+    wishlistArrow: {
+        marginLeft: "auto",
     },
 });

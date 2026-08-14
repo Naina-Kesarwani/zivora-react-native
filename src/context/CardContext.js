@@ -3,6 +3,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const CartContext = createContext();
 
+const createCartItemId = item => {
+  return (
+    item.cartItemId ||
+    `${item.id}-${item.size || "default"}-${item.color || "default"}`
+  );
+};
+
 export const CartProvider = ({ children }) => {
   const [carts, setCarts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -13,10 +20,10 @@ export const CartProvider = ({ children }) => {
 
   const totalSum = (items = []) => {
     const total = items.reduce((amount, item) => {
-      const price = Number(item.price) || 0;
-      const quantity = Number(item.quantity) || 1;
-
-      return amount + price * quantity;
+      return (
+        amount +
+        (Number(item.price) || 0) * (Number(item.quantity) || 1)
+      );
     }, 0);
 
     setTotalPrice(total);
@@ -33,14 +40,14 @@ export const CartProvider = ({ children }) => {
       const savedCarts = await AsyncStorage.getItem("carts");
       const parsedCarts = savedCarts ? JSON.parse(savedCarts) : [];
 
-      // Gives old saved cart items quantity: 1 automatically
-      const cartItemsWithQuantity = parsedCarts.map(item => ({
+      const normalizedCartItems = parsedCarts.map(item => ({
         ...item,
+        cartItemId: createCartItemId(item),
         quantity: item.quantity || 1,
       }));
 
-      setCarts(cartItemsWithQuantity);
-      totalSum(cartItemsWithQuantity);
+      setCarts(normalizedCartItems);
+      totalSum(normalizedCartItems);
     } catch (error) {
       console.error("Failed to load cart items:", error);
     }
@@ -48,23 +55,26 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async item => {
     try {
-      const itemIndex = carts.findIndex(cart => cart.id === item.id);
+      const cartItem = {
+        ...item,
+        cartItemId: createCartItemId(item),
+      };
 
-      let newCartItems;
+      const itemIndex = carts.findIndex(
+        cart => cart.cartItemId === cartItem.cartItemId
+      );
 
-      if (itemIndex === -1) {
-        newCartItems = [...carts, { ...item, quantity: 1 }];
-      } else {
-        // Adding the same product again increases its quantity
-        newCartItems = carts.map(cartItem =>
-          cartItem.id === item.id
-            ? {
-                ...cartItem,
-                quantity: (cartItem.quantity || 1) + 1,
-              }
-            : cartItem
-        );
-      }
+      const newCartItems =
+        itemIndex === -1
+          ? [...carts, { ...cartItem, quantity: 1 }]
+          : carts.map(existingItem =>
+              existingItem.cartItemId === cartItem.cartItemId
+                ? {
+                    ...existingItem,
+                    quantity: (existingItem.quantity || 1) + 1,
+                  }
+                : existingItem
+            );
 
       await saveCartItems(newCartItems);
     } catch (error) {
@@ -72,11 +82,11 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const updateItemQuantity = async (itemId, change) => {
+  const updateItemQuantity = async (cartItemId, change) => {
     try {
       const newCartItems = carts
         .map(cartItem => {
-          if (cartItem.id !== itemId) {
+          if (cartItem.cartItemId !== cartItemId) {
             return cartItem;
           }
 
@@ -85,7 +95,6 @@ export const CartProvider = ({ children }) => {
             quantity: (cartItem.quantity || 1) + change,
           };
         })
-        // Quantity 0 means remove that product from the cart
         .filter(cartItem => cartItem.quantity > 0);
 
       await saveCartItems(newCartItems);
@@ -94,15 +103,61 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const deleteItemFromCart = async itemId => {
+  const deleteItemFromCart = async cartItemId => {
     try {
       const newCartItems = carts.filter(
-        cartItem => cartItem.id !== itemId
+        cartItem => cartItem.cartItemId !== cartItemId
       );
 
       await saveCartItems(newCartItems);
     } catch (error) {
       console.error("Failed to delete cart item:", error);
+    }
+  };
+
+  const clearCart = async () => {
+    try {
+      await saveCartItems([]);
+    } catch (error) {
+      console.error("Failed to clear cart:", error);
+    }
+  };
+
+  const addMultipleToCart = async items => {
+    try {
+      let updatedCart = [...carts];
+
+      items.forEach(orderItem => {
+        const cartItem = {
+          ...orderItem,
+          cartItemId: createCartItemId(orderItem),
+        };
+
+        const itemIndex = updatedCart.findIndex(
+          existingItem =>
+            existingItem.cartItemId === cartItem.cartItemId
+        );
+
+        const orderQuantity = Number(cartItem.quantity) || 1;
+
+        if (itemIndex === -1) {
+          updatedCart.push({
+            ...cartItem,
+            quantity: orderQuantity,
+          });
+        } else {
+          updatedCart[itemIndex] = {
+            ...updatedCart[itemIndex],
+            quantity:
+              (Number(updatedCart[itemIndex].quantity) || 1) +
+              orderQuantity,
+          };
+        }
+      });
+
+      await saveCartItems(updatedCart);
+    } catch (error) {
+      console.error("Failed to reorder items:", error);
     }
   };
 
@@ -114,6 +169,8 @@ export const CartProvider = ({ children }) => {
         addToCart,
         updateItemQuantity,
         deleteItemFromCart,
+        addMultipleToCart,
+        clearCart,
       }}
     >
       {children}

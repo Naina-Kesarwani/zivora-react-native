@@ -139,6 +139,357 @@
       "title": "Ripped Jeans",
       "price": 69.99,
       "categories": ["Women", "Trending Now"]
-    }
+    },
+    ,
+{
+  "id": 21,
+  "image": "https://loremflickr.com/400/600/men,jacket?lock=21",
+  "title": "Classic Bomber Jacket",
+  "price": 84.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 22,
+  "image": "https://loremflickr.com/400/600/women,fashion?lock=22",
+  "title": "Straight Fit Denim",
+  "price": 54.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 23,
+  "image": "https://loremflickr.com/400/600/women,sweater?lock=23",
+  "title": "Soft Knit Pullover",
+  "price": 44.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 24,
+  "image": "https://loremflickr.com/400/600/women,coat?lock=24",
+  "title": "Longline Wool Coat",
+  "price": 139.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 25,
+  "image": "https://loremflickr.com/400/600/men,shirt?lock=25",
+  "title": "Relaxed Cotton Shirt",
+  "price": 36.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 26,
+  "image": "https://loremflickr.com/400/600/men,jacket?lock=26",
+  "title": "Utility Denim Jacket",
+  "price": 74.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 27,
+  "image": "https://loremflickr.com/400/600/women,jeans?lock=27",
+  "title": "High Rise Mom Jeans",
+  "price": 62.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 28,
+  "image": "https://loremflickr.com/400/600/women,sweater?lock=28",
+  "title": "Ribbed Turtleneck",
+  "price": 34.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 29,
+  "image": "https://loremflickr.com/400/600/women,winter-coat?lock=29",
+  "title": "Quilted Puffer Coat",
+  "price": 119.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 30,
+  "image": "https://loremflickr.com/400/600/men,formal-shirt?lock=30",
+  "title": "Oxford Button Shirt",
+  "price": 42.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 31,
+  "image": "https://loremflickr.com/400/600/leather,jacket?lock=31",
+  "title": "Vintage Leather Jacket",
+  "price": 109.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 32,
+  "image": "https://loremflickr.com/400/600/women,denim?lock=32",
+  "title": "Wide Leg Jeans",
+  "price": 64.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 33,
+  "image": "https://loremflickr.com/400/600/women,cardigan?lock=33",
+  "title": "Cable Knit Cardigan",
+  "price": 58.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 34,
+  "image": "https://loremflickr.com/400/600/trench-coat,fashion?lock=34",
+  "title": "Belted Trench Coat",
+  "price": 149.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 35,
+  "image": "https://loremflickr.com/400/600/men,linen-shirt?lock=35",
+  "title": "Linen Casual Shirt",
+  "price": 39.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 36,
+  "image": "https://loremflickr.com/400/600/varsity,jacket?lock=36",
+  "title": "Varsity Jacket",
+  "price": 89.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 37,
+  "image": "https://loremflickr.com/400/600/black,jeans?lock=37",
+  "title": "Skinny Black Jeans",
+  "price": 52.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 38,
+  "image": "https://loremflickr.com/400/600/striped,sweater?lock=38",
+  "title": "Striped Knit Sweater",
+  "price": 46.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 39,
+  "image": "https://loremflickr.com/400/600/men,wool-coat?lock=39",
+  "title": "Double Breasted Coat",
+  "price": 159.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 40,
+  "image": "https://loremflickr.com/400/600/flannel,shirt?lock=40",
+  "title": "Checked Flannel Shirt",
+  "price": 37.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 41,
+  "image": "https://loremflickr.com/400/600/women,denim-jacket?lock=41",
+  "title": "Oversized Denim Jacket",
+  "price": 79.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 42,
+  "image": "https://loremflickr.com/400/600/men,jeans?lock=42",
+  "title": "Light Wash Jeans",
+  "price": 48.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 43,
+  "image": "https://loremflickr.com/400/600/men,crewneck?lock=43",
+  "title": "Everyday Crewneck",
+  "price": 31.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 44,
+  "image": "https://loremflickr.com/400/600/women,faux-fur-coat?lock=44",
+  "title": "Faux Fur Winter Coat",
+  "price": 169.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 45,
+  "image": "https://loremflickr.com/400/600/men,formal-fashion?lock=45",
+  "title": "Slim Fit Formal Shirt",
+  "price": 45.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 46,
+  "image": "https://loremflickr.com/400/600/biker,jacket?lock=46",
+  "title": "Suede Biker Jacket",
+  "price": 124.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 47,
+  "image": "https://loremflickr.com/400/600/women,boyfriend-jeans?lock=47",
+  "title": "Relaxed Boyfriend Jeans",
+  "price": 59.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 48,
+  "image": "https://loremflickr.com/400/600/cashmere,sweater?lock=48",
+  "title": "Cashmere Blend Sweater",
+  "price": 72.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 49,
+  "image": "https://loremflickr.com/400/600/men,peacoat?lock=49",
+  "title": "Classic Peacoat",
+  "price": 114.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 50,
+  "image": "https://loremflickr.com/400/600/printed,shirt?lock=50",
+  "title": "Printed Casual Shirt",
+  "price": 35.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 51,
+  "image": "https://loremflickr.com/400/600/windbreaker,fashion?lock=51",
+  "title": "Lightweight Windbreaker",
+  "price": 68.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 52,
+  "image": "https://loremflickr.com/400/600/women,denim-jeans?lock=52",
+  "title": "Cropped Denim Jeans",
+  "price": 57.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 53,
+  "image": "https://loremflickr.com/400/600/women,knit-top?lock=53",
+  "title": "V Neck Knit Top",
+  "price": 32.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 54,
+  "image": "https://loremflickr.com/400/600/women,parka?lock=54",
+  "title": "Hooded Parka Jacket",
+  "price": 134.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 55,
+  "image": "https://loremflickr.com/400/600/men,denim-shirt?lock=55",
+  "title": "Denim Overshirt",
+  "price": 49.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 56,
+  "image": "https://loremflickr.com/400/600/men,winter-jacket?lock=56",
+  "title": "Padded Winter Jacket",
+  "price": 129.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 57,
+  "image": "https://loremflickr.com/400/600/women,grey-jeans?lock=57",
+  "title": "Grey Straight Jeans",
+  "price": 55.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 58,
+  "image": "https://loremflickr.com/400/600/women,turtleneck?lock=58",
+  "title": "Mock Neck Sweater",
+  "price": 41.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 59,
+  "image": "https://loremflickr.com/400/600/men,overcoat?lock=59",
+  "title": "Wool Blend Overcoat",
+  "price": 179.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 60,
+  "image": "https://loremflickr.com/400/600/men,resort-shirt?lock=60",
+  "title": "Resort Printed Shirt",
+  "price": 38.99,
+  "categories": ["Men", "Trending Now"]
+},
+{
+  "id": 61,
+  "image": "https://loremflickr.com/400/600/men,work-jacket?lock=61",
+  "title": "Canvas Work Jacket",
+  "price": 94.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 62,
+  "image": "https://loremflickr.com/400/600/women,blue-jeans?lock=62",
+  "title": "Classic Blue Denim",
+  "price": 51.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 63,
+  "image": "https://loremflickr.com/400/600/women,wool-jumper?lock=63",
+  "title": "Chunky Knit Jumper",
+  "price": 63.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 64,
+  "image": "https://loremflickr.com/400/600/women,long-coat?lock=64",
+  "title": "Minimalist Long Coat",
+  "price": 144.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 65,
+  "image": "https://loremflickr.com/400/600/men,polo-shirt?lock=65",
+  "title": "Textured Polo Shirt",
+  "price": 43.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 66,
+  "image": "https://loremflickr.com/400/600/women,rain-jacket?lock=66",
+  "title": "Waterproof Rain Jacket",
+  "price": 86.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 67,
+  "image": "https://loremflickr.com/400/600/men,stretch-jeans?lock=67",
+  "title": "Stretch Fit Jeans",
+  "price": 53.99,
+  "categories": ["Men", "New"]
+},
+{
+  "id": 68,
+  "image": "https://loremflickr.com/400/600/women,oversized-sweater?lock=68",
+  "title": "Oversized Wool Sweater",
+  "price": 67.99,
+  "categories": ["Women", "Trending Now"]
+},
+{
+  "id": 69,
+  "image": "https://loremflickr.com/400/600/women,blazer?lock=69",
+  "title": "Structured Blazer Coat",
+  "price": 154.99,
+  "categories": ["Women", "New"]
+},
+{
+  "id": 70,
+  "image": "https://loremflickr.com/400/600/men,pocket-shirt?lock=70",
+  "title": "Everyday Pocket Shirt",
+  "price": 33.99,
+  "categories": ["Men", "Trending Now"]
+}
   ]
 }

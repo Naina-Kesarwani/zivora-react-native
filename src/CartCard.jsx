@@ -45,7 +45,7 @@ const CartCard = ({
         <View style={styles.quantityRow}>
           <TouchableOpacity
             style={styles.quantityButton}
-            onPress={() => updateItemQuantity(item.id, -1)}
+            onPress={() => updateItemQuantity(item.cartItemId, -1)}
           >
             <FontAwesome name="minus" size={14} color="#E55858" />
           </TouchableOpacity>
@@ -54,7 +54,7 @@ const CartCard = ({
 
           <TouchableOpacity
             style={styles.quantityButton}
-            onPress={() => updateItemQuantity(item.id, 1)}
+            onPress={() => updateItemQuantity(item.cartItemId, 1)}
           >
             <FontAwesome name="plus" size={14} color="#E55858" />
           </TouchableOpacity>
@@ -67,7 +67,7 @@ const CartCard = ({
 
       <TouchableOpacity
         style={styles.deleteButton}
-        onPress={() => deleteItemFromCart(item.id)}
+        onPress={() => deleteItemFromCart(item.cartItemId)}
       >
         <FontAwesome name="trash" color="#E55858" size={22} />
       </TouchableOpacity>
